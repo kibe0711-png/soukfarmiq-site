@@ -1,11 +1,16 @@
 import Image from "next/image";
+import LiveTicker from "./LiveTicker";
 
 const WA_LINK = "https://wa.me/447522196521?text=Hi%20Altiora%2C%20I%27d%20like%20to%20request%20a%20demo%20of%20FarmIQ.";
 
-export default function Hero() {
+interface HeroProps {
+  tickerStats: { label: string; value: number; suffix?: string }[];
+}
+
+export default function Hero({ tickerStats }: HeroProps) {
   return (
     <section className="relative overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
+      <div className="max-w-6xl mx-auto px-6 pt-24 pb-12 sm:pt-32 sm:pb-16">
         <div className="max-w-3xl">
           <Image
             src="/altiora-logo.png"
@@ -46,6 +51,9 @@ export default function Hero() {
             </a>
           </div>
         </div>
+      </div>
+      <div className="border-t border-gray-100">
+        <LiveTicker stats={tickerStats} />
       </div>
       {/* Subtle gradient blob */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-blue-50 via-transparent to-transparent rounded-full blur-3xl opacity-60 -z-10" />
