@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const WA_LINK = "https://wa.me/447522196521?text=Hi%20Altiora%2C%20I%27d%20like%20to%20request%20a%20demo%20of%20SoukFarmIQ.";
+const WA_LINK = "https://wa.me/447522196521?text=Hi%20Altiora%2C%20I%27d%20like%20to%20request%20a%20demo%20of%20FarmIQ.";
 
 export default function NavBar() {
   return (

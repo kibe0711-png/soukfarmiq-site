@@ -1,12 +1,21 @@
-const WA_LINK = "https://wa.me/447522196521?text=Hi%20Altiora%2C%20I%27d%20like%20to%20request%20a%20demo%20of%20SoukFarmIQ.";
+import Image from "next/image";
+
+const WA_LINK = "https://wa.me/447522196521?text=Hi%20Altiora%2C%20I%27d%20like%20to%20request%20a%20demo%20of%20FarmIQ.";
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
         <div className="max-w-3xl">
+          <Image
+            src="/altiora-logo.png"
+            alt="Altiora"
+            width={120}
+            height={120}
+            className="mb-6"
+          />
           <p className="text-sm font-medium text-blue-600 tracking-wide uppercase mb-4">
-            SoukFarmIQ by Altiora
+            FarmIQ by Altiora
           </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 leading-[1.1]">
             Farm Operations Intelligence,{" "}

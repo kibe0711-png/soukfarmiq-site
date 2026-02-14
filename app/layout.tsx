@@ -8,11 +8,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Altiora — Farm Operations Intelligence",
+  title: "FarmIQ by Altiora — Farm Operations Intelligence",
   description:
-    "SoukFarmIQ by Altiora. Complete ERP for modern agricultural enterprises — scheduling, compliance, harvest forecasting, labor & payroll.",
+    "FarmIQ by Altiora. Complete ERP for modern agricultural enterprises — scheduling, compliance, harvest forecasting, labor & payroll.",
   openGraph: {
-    title: "Altiora — Farm Operations Intelligence",
+    title: "FarmIQ by Altiora — Farm Operations Intelligence",
     description:
       "From planning to harvest — one platform for East African agricultural enterprises.",
     type: "website",

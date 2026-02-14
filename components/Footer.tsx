@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div className="flex items-center gap-3">
             <Image
-              src="/souk-circle.png"
+              src="/altiora-logo.png"
               alt="Altiora"
               width={28}
               height={28}
