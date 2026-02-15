@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "FarmIQ by Altiora — Farm Operations Intelligence",
   description:
     "FarmIQ by Altiora. Complete ERP for modern agricultural enterprises — scheduling, compliance, harvest forecasting, labor & payroll.",
+  verification: {
+    google: "5decQpbLQcBWY_rkXW5nBOihc5fj37-UIuKm31eeb7o",
+  },
   openGraph: {
     title: "FarmIQ by Altiora — Farm Operations Intelligence",
     description:
