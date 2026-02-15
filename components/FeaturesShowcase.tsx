@@ -47,12 +47,20 @@ const nutriSopData = [
 
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const ganttActivities = [
+const laborGanttActivities = [
   { crop: "FB",  label: "FB P1 W12 — Weeding (2nd)",    mandays: 6.0,  days: [0, 1] },
   { crop: "FB",  label: "FB P2 W7 — Spraying",          mandays: 4.0,  days: [2] },
   { crop: "TSB", label: "TSB P1 W14 — Harvesting",      mandays: 10.0, days: [0, 1, 2, 3, 4] },
   { crop: "GC",  label: "GC P1 W19 — Pruning",          mandays: 5.0,  days: [3, 4] },
   { crop: "RC",  label: "RC P1 W10 — Transplanting",    mandays: 12.0, days: [0, 1, 2] },
+];
+
+const nutriGanttActivities = [
+  { crop: "FB",  label: "FB P1 W12 — KNO3 Foliar",       qty: 7.5,  days: [0, 2] },
+  { crop: "FB",  label: "FB P2 W7 — CalciMax Foliar",     qty: 5.0,  days: [1] },
+  { crop: "TSB", label: "TSB P1 W14 — NPK 17-17-17",     qty: 480.0, days: [0, 1, 2] },
+  { crop: "GC",  label: "GC P1 W19 — Amistar Top",        qty: 1.0,  days: [3] },
+  { crop: "RC",  label: "RC P1 W10 — DAP Fertilizer",     qty: 400.0, days: [0, 1] },
 ];
 
 /* ── Traffic light helper ── */
@@ -225,29 +233,71 @@ function SopTabsPreview() {
   );
 }
 
-/* ── Section 3: Gantt Chart ── */
+/* ── Section 3: Gantt Chart (Tabbed — Labor + Nutrition) ── */
 function GanttPreview() {
+  const [tab, setTab] = useState<"labor" | "nutri">("labor");
+  const isLabor = tab === "labor";
+
+  const activities = isLabor ? laborGanttActivities : nutriGanttActivities;
+  const valueKey = isLabor ? "mandays" : "qty";
+  const valueLabel = isLabor ? "Mandays" : "Qty";
+  const totalLabel = isLabor ? "Total Mandays" : "Total Quantity";
+
   const dayTotals = DAY_LABELS.map((_, dayIdx) => {
-    return ganttActivities.reduce((sum, act) => {
+    return activities.reduce((sum, act) => {
       if (!act.days.includes(dayIdx)) return sum;
-      return sum + act.mandays / act.days.length;
+      const val = (act as Record<string, unknown>)[valueKey] as number;
+      return sum + val / act.days.length;
     }, 0);
   });
-  const grandTotal = ganttActivities.reduce((sum, act) => sum + act.mandays, 0);
+  const grandTotal = activities.reduce((sum, act) => {
+    return sum + ((act as Record<string, unknown>)[valueKey] as number);
+  }, 0);
+
+  const accent = {
+    summaryBg: isLabor ? "bg-teal-50 border-teal-200" : "bg-purple-50 border-purple-200",
+    summaryTitle: isLabor ? "text-teal-800" : "text-purple-800",
+    summaryTotal: isLabor ? "text-teal-700" : "text-purple-700",
+    dayLabel: isLabor ? "text-teal-600" : "text-purple-600",
+    dayValue: isLabor ? "text-teal-700" : "text-purple-700",
+    cellActive: isLabor ? "bg-teal-600 text-white" : "bg-purple-600 text-white",
+    footerAccent: isLabor ? "text-teal-700" : "text-purple-700",
+    tabActive: isLabor ? "bg-teal-600 text-white" : "bg-purple-600 text-white",
+  };
 
   return (
     <div className="space-y-3">
+      {/* Tab switcher */}
+      <div className="flex rounded-lg border border-gray-200 overflow-hidden w-fit">
+        <button
+          onClick={() => setTab("labor")}
+          className={`px-4 py-2 text-sm font-medium transition-colors ${
+            tab === "labor" ? "bg-teal-600 text-white" : "bg-white text-gray-500 hover:text-gray-900"
+          }`}
+        >
+          Labor Schedule
+        </button>
+        <button
+          onClick={() => setTab("nutri")}
+          className={`px-4 py-2 text-sm font-medium transition-colors ${
+            tab === "nutri" ? "bg-purple-600 text-white" : "bg-white text-gray-500 hover:text-gray-900"
+          }`}
+        >
+          Nutrition Schedule
+        </button>
+      </div>
+
       {/* Summary bar */}
-      <div className="bg-teal-50 border border-teal-200 rounded-lg px-5 py-4">
+      <div className={`${accent.summaryBg} border rounded-lg px-5 py-4`}>
         <div className="flex items-center justify-between mb-3">
-          <span className="text-teal-800 font-medium text-base">Total Mandays</span>
-          <span className="text-2xl font-bold text-teal-700">{grandTotal.toFixed(1)}</span>
+          <span className={`${accent.summaryTitle} font-medium text-base`}>{totalLabel}</span>
+          <span className={`text-2xl font-bold ${accent.summaryTotal}`}>{grandTotal.toFixed(1)}</span>
         </div>
         <div className="grid grid-cols-7 gap-2">
           {DAY_LABELS.map((day, idx) => (
             <div key={day} className="text-center">
-              <div className="text-xs text-teal-600 font-medium mb-1">{day}</div>
-              <div className={`text-sm font-bold ${dayTotals[idx] > 0 ? "text-teal-700" : "text-gray-400"}`}>
+              <div className={`text-xs ${accent.dayLabel} font-medium mb-1`}>{day}</div>
+              <div className={`text-sm font-bold ${dayTotals[idx] > 0 ? accent.dayValue : "text-gray-400"}`}>
                 {dayTotals[idx] > 0 ? dayTotals[idx].toFixed(1) : "0"}
               </div>
             </div>
@@ -265,12 +315,13 @@ function GanttPreview() {
                 {DAY_LABELS.map((day) => (
                   <th key={day} className="text-center py-2.5 px-1 font-medium text-gray-700 w-16">{day}</th>
                 ))}
-                <th className="text-center py-2.5 px-3 font-medium text-gray-700 w-20">Mandays</th>
+                <th className="text-center py-2.5 px-3 font-medium text-gray-700 w-20">{valueLabel}</th>
               </tr>
             </thead>
             <tbody>
-              {ganttActivities.map((act, idx) => {
-                const mandaysPerDay = act.mandays / act.days.length;
+              {activities.map((act, idx) => {
+                const val = (act as Record<string, unknown>)[valueKey] as number;
+                const perDay = val / act.days.length;
                 const c = cropColor(act.crop);
                 return (
                   <tr key={idx} className="border-b border-gray-100">
@@ -288,18 +339,16 @@ function GanttPreview() {
                         <td key={dayIdx} className="py-1 px-1 text-center">
                           <div
                             className={`w-full h-10 rounded text-xs font-semibold flex items-center justify-center ${
-                              isActive
-                                ? "bg-teal-600 text-white"
-                                : "bg-gray-100 text-gray-400"
+                              isActive ? accent.cellActive : "bg-gray-100 text-gray-400"
                             }`}
                           >
-                            {isActive ? mandaysPerDay.toFixed(1) : ""}
+                            {isActive ? perDay.toFixed(1) : ""}
                           </div>
                         </td>
                       );
                     })}
                     <td className="py-2 px-3 text-center font-semibold text-gray-700 text-xs">
-                      {act.mandays.toFixed(1)}
+                      {val.toFixed(1)}
                     </td>
                   </tr>
                 );
@@ -307,15 +356,15 @@ function GanttPreview() {
             </tbody>
             <tfoot>
               <tr className="border-t-2 border-gray-300 bg-gray-50">
-                <td className="py-2 px-3 font-semibold text-gray-700 text-xs">Total Mandays</td>
+                <td className="py-2 px-3 font-semibold text-gray-700 text-xs">{totalLabel}</td>
                 {dayTotals.map((total, idx) => (
                   <td key={idx} className="py-2 px-1 text-center font-semibold text-xs">
-                    <span className={total > 0 ? "text-teal-700" : "text-gray-400"}>
+                    <span className={total > 0 ? accent.footerAccent : "text-gray-400"}>
                       {total > 0 ? total.toFixed(1) : "0"}
                     </span>
                   </td>
                 ))}
-                <td className="py-2 px-3 text-center font-bold text-teal-700 text-xs">
+                <td className={`py-2 px-3 text-center font-bold ${accent.footerAccent} text-xs`}>
                   {grandTotal.toFixed(1)}
                 </td>
               </tr>
@@ -403,7 +452,7 @@ export default function FeaturesShowcase() {
           </div>
           <GanttPreview />
           <p className="mt-6 text-xs text-gray-400 max-w-2xl">
-            Each row is a farm phase + activity. Teal cells show scheduled days with mandays distributed evenly. The footer totals give you the full labor picture for the week at a glance.
+            Switch between Labor and Nutrition schedules. Teal cells show labor mandays, purple cells show nutrition quantities. Each row is a farm phase + activity, with totals per day and for the week.
           </p>
         </div>
       </section>
