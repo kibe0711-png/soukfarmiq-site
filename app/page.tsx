@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import NavBar from "@/components/NavBar";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
+import HowItWorks from "@/components/HowItWorks";
 import Consultancy from "@/components/Consultancy";
 import UseCases from "@/components/UseCases";
 import CTA from "@/components/CTA";
@@ -52,6 +53,7 @@ export default async function Home() {
       <NavBar />
       <Hero tickerStats={tickerStats} />
       <Features />
+      <HowItWorks />
       <Consultancy />
       <UseCases />
       <CTA />

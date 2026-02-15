@@ -25,6 +25,12 @@ export default function NavBar() {
             Features
           </a>
           <a
+            href="#how-it-works"
+            className="hidden sm:inline text-sm text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            How It Works
+          </a>
+          <a
             href="#consultancy"
             className="hidden sm:inline text-sm text-gray-500 hover:text-gray-900 transition-colors"
           >
