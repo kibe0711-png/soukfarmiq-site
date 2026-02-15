@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
+import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import Hero from "@/components/Hero";
-import Features from "@/components/Features";
 import HowItWorks from "@/components/HowItWorks";
 import Consultancy from "@/components/Consultancy";
 import UseCases from "@/components/UseCases";
@@ -52,7 +52,30 @@ export default async function Home() {
     <main className="min-h-screen bg-white">
       <NavBar />
       <Hero tickerStats={tickerStats} />
-      <Features />
+
+      <section className="py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <p className="text-sm font-medium text-blue-600 tracking-wide uppercase mb-3">
+            Platform
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+            Everything you need to run a farm
+          </h2>
+          <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
+            A complete operations toolkit built for agricultural enterprises across East Africa.
+          </p>
+          <Link
+            href="/features"
+            className="mt-8 inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-all hover:shadow-lg"
+          >
+            Explore Features
+            <svg className="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+      </section>
+
       <HowItWorks />
       <Consultancy />
       <UseCases />

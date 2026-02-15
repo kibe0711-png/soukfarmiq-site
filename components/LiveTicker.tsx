@@ -33,18 +33,23 @@ function AnimatedNumber({ target, suffix }: { target: number; suffix?: string })
 }
 
 export default function LiveTicker({ stats }: TickerProps) {
-  const items = [...stats, ...stats];
+  // Repeat enough times so the strip is always wider than the viewport
+  const items = [...stats, ...stats, ...stats, ...stats];
 
   return (
     <div className="overflow-hidden">
-      <div className="animate-ticker flex whitespace-nowrap py-4">
+      <div className="animate-ticker flex whitespace-nowrap py-4 will-change-transform">
         {items.map((stat, i) => (
           <div
             key={i}
             className="inline-flex items-center gap-2 text-sm text-gray-400 mx-8 shrink-0"
           >
             <span className="font-bold text-green-500 tabular-nums text-lg">
-              <AnimatedNumber target={stat.value} suffix={stat.suffix} />
+              {i < stats.length ? (
+                <AnimatedNumber target={stat.value} suffix={stat.suffix} />
+              ) : (
+                <span>{stat.value.toLocaleString()}{stat.suffix || ""}</span>
+              )}
             </span>
             <span>{stat.label}</span>
             <span className="text-gray-300 ml-6">·</span>
