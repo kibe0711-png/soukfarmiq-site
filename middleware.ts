@@ -17,7 +17,6 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  // Pass user info to downstream pages via headers
   const response = NextResponse.next();
   response.headers.set("x-user-id", user.userId);
   response.headers.set("x-user-name", user.name);
@@ -30,7 +29,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Protect /analytics and all sub-routes EXCEPT /analytics/auth/*
     "/analytics",
     "/analytics/((?!auth).*)",
   ],

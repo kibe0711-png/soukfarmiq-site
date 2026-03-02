@@ -56,7 +56,6 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-60 bg-slate-800 text-white flex flex-col z-40">
-      {/* Logo area */}
       <div className="px-5 py-5 border-b border-slate-700">
         <div className="flex items-center gap-3">
           <Image
@@ -66,15 +65,12 @@ export default function Sidebar({ user }: SidebarProps) {
             height={28}
             className="rounded"
           />
-          <div>
-            <span className="text-sm font-semibold tracking-tight">
-              FarmIQ Analytics
-            </span>
-          </div>
+          <span className="text-sm font-semibold tracking-tight">
+            FarmIQ Analytics
+          </span>
         </div>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1">
         {NAV_ITEMS.map((item) => {
           const isActive =
@@ -114,7 +110,6 @@ export default function Sidebar({ user }: SidebarProps) {
         })}
       </nav>
 
-      {/* User card */}
       <div className="px-4 py-4 border-t border-slate-700">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">

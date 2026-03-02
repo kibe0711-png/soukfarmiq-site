@@ -52,7 +52,7 @@ export async function createSession(user: AnalyticsUser) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/analytics",
-    maxAge: 60 * 60 * 24, // 24 hours
+    maxAge: 60 * 60 * 24,
   });
 }
 
@@ -88,7 +88,7 @@ export async function clearSession() {
   });
 }
 
-/** Verify session from a raw cookie value (for middleware, no async cookies()) */
+/** Verify session from a raw cookie value (for middleware) */
 export async function verifySessionToken(
   token: string
 ): Promise<AnalyticsUser | null> {
