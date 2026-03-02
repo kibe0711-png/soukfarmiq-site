@@ -8,7 +8,7 @@ import KpiCard from "@/components/analytics/KpiCard";
 import ComplianceChart from "@/components/analytics/labor/ComplianceChart";
 import MissedTasksTable from "@/components/analytics/labor/MissedTasksTable";
 import ActualActivitiesChart from "@/components/analytics/labor/ActualActivitiesChart";
-import PhaseAttentionGrid from "@/components/analytics/labor/PhaseAttentionGrid";
+import CoverageHeatmap from "@/components/analytics/labor/CoverageHeatmap";
 import HarvestEfficiencyChart from "@/components/analytics/labor/HarvestEfficiencyChart";
 
 export default async function LaborPage() {
@@ -176,8 +176,14 @@ export default async function LaborPage() {
             <ActualActivitiesChart data={data.actualActivities} />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <PhaseAttentionGrid data={data.phaseAttention} />
+          <div className="mb-6">
+            <CoverageHeatmap
+              heatmap={data.phaseHeatmap}
+              phases={data.phaseAttention}
+            />
+          </div>
+
+          <div>
             <MissedTasksTable data={data.missedTasks} />
           </div>
         </>

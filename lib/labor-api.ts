@@ -31,10 +31,20 @@ export interface PhaseRow {
   farm: string;
   phaseId: string;
   cropCode: string;
-  weekStart: string;
+  weekMonday: string;
+  wss: number;
   plannedMandays: number;
   actualMandays: number;
   coveragePct: number;
+}
+
+export interface HeatmapCell {
+  farm: string;
+  weekMonday: string;
+  totalPlanned: number;
+  totalActual: number;
+  coveragePct: number;
+  phaseCount: number;
 }
 
 export interface HarvestRow {
@@ -51,6 +61,7 @@ export interface LaborReportResponse {
   missedTasks: MissedTaskRow[];
   actualActivities: ActivityRow[];
   phaseAttention: PhaseRow[];
+  phaseHeatmap: HeatmapCell[];
   harvestEfficiency: HarvestRow[];
 }
 

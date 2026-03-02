@@ -18,7 +18,7 @@ export default function PhaseAttentionGrid({ data }: Props) {
   for (const row of data) {
     const key = `${row.farm}|${row.phaseId}`;
     const prev = latest.get(key);
-    if (!prev || row.weekStart > prev.weekStart) {
+    if (!prev || row.weekMonday > prev.weekMonday) {
       latest.set(key, row);
     }
   }
