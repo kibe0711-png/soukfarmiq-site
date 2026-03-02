@@ -7,7 +7,6 @@ import {
 import KpiCard from "@/components/analytics/KpiCard";
 import ComplianceChart from "@/components/analytics/labor/ComplianceChart";
 import MissedTasksTable from "@/components/analytics/labor/MissedTasksTable";
-import ActualActivitiesChart from "@/components/analytics/labor/ActualActivitiesChart";
 import CoverageHeatmap from "@/components/analytics/labor/CoverageHeatmap";
 import HarvestEfficiencyChart from "@/components/analytics/labor/HarvestEfficiencyChart";
 
@@ -173,14 +172,7 @@ export default async function LaborPage() {
           </div>
 
           <div className="mb-6">
-            <ActualActivitiesChart data={data.actualActivities} />
-          </div>
-
-          <div className="mb-6">
-            <CoverageHeatmap
-              heatmap={data.phaseHeatmap}
-              phases={data.phaseAttention}
-            />
+            <CoverageHeatmap phases={data.phaseAttention} />
           </div>
 
           <div>
