@@ -64,13 +64,16 @@ export async function getSession(): Promise<AnalyticsUser | null> {
 
   try {
     const { payload } = await jwtVerify(token, getSessionSecret());
-    return {
-      userId: String(payload.userId),
-      name: String(payload.name),
-      role: String(payload.role),
-      farm: String(payload.farm),
-      farmId: String(payload.farmId),
+    const user = {
+      userId: payload.userId as string,
+      name: payload.name as string,
+      role: payload.role as string,
+      farm: payload.farm as string,
+      farmId: payload.farmId as string,
     };
+    // Reject sessions with missing fields
+    if (!user.userId || !user.name || !user.farm) return null;
+    return user;
   } catch {
     return null;
   }
