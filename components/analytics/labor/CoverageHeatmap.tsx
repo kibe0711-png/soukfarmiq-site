@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { PhaseRow, PhaseActivityRow } from "@/lib/labor-api";
+import type { PhaseRow, SopCoverageRow } from "@/lib/labor-api";
 
 interface Props {
   phases: PhaseRow[];
-  phaseActivities: PhaseActivityRow[];
+  sopCoverage: SopCoverageRow[];
 }
 
 function getCellBg(pct: number) {
@@ -32,7 +32,6 @@ function getCurrentWeekMonday(): string {
   return monday.toISOString().split("T")[0];
 }
 
-/** Normalize "2026-02-23T00:00:00.000Z" → "2026-02-23" for reliable comparison */
 function toDateStr(iso: string): string {
   return iso.split("T")[0];
 }
@@ -42,7 +41,28 @@ function formatWeek(iso: string): string {
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }
 
-export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
+function varianceStyle(v: number): string {
+  if (v > 0) return "text-blue-600";
+  if (v < 0) return "text-red-600";
+  return "text-gray-400";
+}
+
+function sourceStyle(source: string): { bg: string; label: string } {
+  if (source === "sop") return { bg: "bg-green-100 text-green-700", label: "SOP" };
+  return { bg: "bg-amber-100 text-amber-700", label: "Unplanned" };
+}
+
+function categoryLabel(cat: string): string {
+  switch (cat) {
+    case "labor_sop": return "Labor";
+    case "harvesting": return "Harvest";
+    case "operational": return "Ops";
+    case "supervisory": return "Supervisor";
+    default: return cat;
+  }
+}
+
+export default function CoverageHeatmap({ phases, sopCoverage }: Props) {
   const [selectedFarm, setSelectedFarm] = useState<string>("all");
   const [selectedWeek, setSelectedWeek] = useState<string>("latest");
   const [selected, setSelected] = useState<PhaseRow | null>(null);
@@ -100,18 +120,32 @@ export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
     [filtered]
   );
 
-  // Activities for the selected phase + week
-  const selectedActivities = useMemo(() => {
+  // SOP coverage rows for the selected phase + week
+  const selectedTasks = useMemo(() => {
     if (!selected || !activeWeek) return [];
-    return phaseActivities
+    return sopCoverage
       .filter(
-        (a) =>
-          a.farm === selected.farm &&
-          a.phaseId === selected.phaseId &&
-          a.weekMonday === activeWeek
+        (r) =>
+          r.farm === selected.farm &&
+          r.phaseId === selected.phaseId &&
+          r.weekMonday === activeWeek
       )
-      .sort((a, b) => b.mandays - a.mandays);
-  }, [selected, activeWeek, phaseActivities]);
+      .sort((a, b) => {
+        // SOP tasks first, then unplanned; within each group sort by planned desc
+        if (a.source !== b.source) return a.source === "sop" ? -1 : 1;
+        return b.plannedMandays - a.plannedMandays || b.actualMandays - a.actualMandays;
+      });
+  }, [selected, activeWeek, sopCoverage]);
+
+  // Summary stats for selected phase
+  const taskSummary = useMemo(() => {
+    const sopTasks = selectedTasks.filter((t) => t.source === "sop");
+    const unplanned = selectedTasks.filter((t) => t.source === "unplanned");
+    const totalPlanned = sopTasks.reduce((s, t) => s + t.plannedMandays, 0);
+    const totalActual = selectedTasks.reduce((s, t) => s + t.actualMandays, 0);
+    const sopSkipped = sopTasks.filter((t) => t.actualMandays === 0).length;
+    return { sopTasks: sopTasks.length, unplanned: unplanned.length, totalPlanned, totalActual, sopSkipped };
+  }, [selectedTasks]);
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -122,7 +156,7 @@ export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
           </h3>
           <p className="text-xs text-gray-400 mt-0.5">
             Each block = one phase, sized by planned mandays. Click for
-            activity breakdown.
+            SOP breakdown.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -278,7 +312,7 @@ export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
           </div>
 
           {/* KPI row */}
-          <div className="grid grid-cols-3 gap-3 text-xs mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs mb-4">
             <div className="bg-gray-50 rounded-lg p-3">
               <p className="text-gray-400 mb-1">Coverage</p>
               <p className="text-lg font-bold text-gray-900 tabular-nums">
@@ -288,75 +322,106 @@ export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
             <div className="bg-gray-50 rounded-lg p-3">
               <p className="text-gray-400 mb-1">Planned</p>
               <p className="text-lg font-bold text-gray-900 tabular-nums">
-                {selected.plannedMandays}
+                {Number(taskSummary.totalPlanned.toFixed(1))}
               </p>
               <p className="text-[10px] text-gray-400">mandays</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-3">
               <p className="text-gray-400 mb-1">Actual</p>
               <p className="text-lg font-bold text-gray-900 tabular-nums">
-                {selected.actualMandays}
+                {taskSummary.totalActual}
               </p>
               <p className="text-[10px] text-gray-400">mandays</p>
             </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-gray-400 mb-1">SOP Skipped</p>
+              <p className={`text-lg font-bold tabular-nums ${taskSummary.sopSkipped > 0 ? "text-red-600" : "text-green-600"}`}>
+                {taskSummary.sopSkipped}
+              </p>
+              <p className="text-[10px] text-gray-400">of {taskSummary.sopTasks} tasks</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-gray-400 mb-1">Unplanned</p>
+              <p className={`text-lg font-bold tabular-nums ${taskSummary.unplanned > 0 ? "text-amber-600" : "text-gray-400"}`}>
+                {taskSummary.unplanned}
+              </p>
+              <p className="text-[10px] text-gray-400">activities</p>
+            </div>
           </div>
 
-          {/* Activity breakdown table */}
-          {selectedActivities.length > 0 ? (
-            <div className="overflow-auto max-h-64">
+          {/* SOP coverage table */}
+          {selectedTasks.length > 0 ? (
+            <div className="overflow-auto max-h-72">
               <table className="w-full text-xs">
                 <thead className="sticky top-0 bg-gray-50">
                   <tr>
                     <th className="text-left px-3 py-2 font-medium text-gray-500">
-                      Activity
-                    </th>
-                    <th className="text-right px-3 py-2 font-medium text-gray-500">
-                      Mandays
-                    </th>
-                    <th className="text-right px-3 py-2 font-medium text-gray-500">
-                      Workers
+                      Task
                     </th>
                     <th className="text-center px-3 py-2 font-medium text-gray-500">
-                      In SOP?
+                      Category
+                    </th>
+                    <th className="text-right px-3 py-2 font-medium text-gray-500">
+                      Planned
+                    </th>
+                    <th className="text-right px-3 py-2 font-medium text-gray-500">
+                      Actual
+                    </th>
+                    <th className="text-right px-3 py-2 font-medium text-gray-500">
+                      Variance
+                    </th>
+                    <th className="text-center px-3 py-2 font-medium text-gray-500">
+                      Source
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {selectedActivities.map((a, i) => (
-                    <tr key={i} className="hover:bg-gray-50">
-                      <td className="px-3 py-2 text-gray-900">
-                        {a.activity}
-                      </td>
-                      <td className="px-3 py-2 text-right text-gray-700 tabular-nums">
-                        {a.mandays}
-                      </td>
-                      <td className="px-3 py-2 text-right text-gray-500 tabular-nums">
-                        {a.workers}
-                      </td>
-                      <td className="px-3 py-2 text-center">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                            a.inSop
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {a.inSop ? "YES" : "NO"}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {selectedTasks.map((t, i) => {
+                    const src = sourceStyle(t.source);
+                    return (
+                      <tr key={i} className="hover:bg-gray-50">
+                        <td className="px-3 py-2 text-gray-900">
+                          {t.task}
+                        </td>
+                        <td className="px-3 py-2 text-center">
+                          <span className="text-[10px] text-gray-500">
+                            {categoryLabel(t.category)}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 text-right text-gray-500 tabular-nums">
+                          {t.plannedMandays > 0 ? Number(t.plannedMandays.toFixed(1)) : "—"}
+                        </td>
+                        <td className="px-3 py-2 text-right text-gray-700 tabular-nums font-medium">
+                          {t.actualMandays > 0 ? t.actualMandays : "—"}
+                        </td>
+                        <td className={`px-3 py-2 text-right tabular-nums font-medium ${varianceStyle(t.variance)}`}>
+                          {t.variance > 0 ? "+" : ""}{Number(t.variance.toFixed(1))}
+                        </td>
+                        <td className="px-3 py-2 text-center">
+                          <span
+                            className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium ${src.bg}`}
+                          >
+                            {src.label}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
                 <tfoot className="border-t border-gray-200 bg-gray-50">
                   <tr>
-                    <td className="px-3 py-2 font-medium text-gray-700">
+                    <td className="px-3 py-2 font-medium text-gray-700" colSpan={2}>
                       Total
                     </td>
                     <td className="px-3 py-2 text-right font-bold text-gray-900 tabular-nums">
-                      {selectedActivities.reduce((s, a) => s + a.mandays, 0)}
+                      {Number(taskSummary.totalPlanned.toFixed(1))}
                     </td>
-                    <td className="px-3 py-2 text-right text-gray-500 tabular-nums">
-                      {selectedActivities.reduce((s, a) => s + a.workers, 0)}
+                    <td className="px-3 py-2 text-right font-bold text-gray-900 tabular-nums">
+                      {taskSummary.totalActual}
+                    </td>
+                    <td className={`px-3 py-2 text-right font-bold tabular-nums ${varianceStyle(taskSummary.totalActual - taskSummary.totalPlanned)}`}>
+                      {taskSummary.totalActual - taskSummary.totalPlanned > 0 ? "+" : ""}
+                      {Number((taskSummary.totalActual - taskSummary.totalPlanned).toFixed(1))}
                     </td>
                     <td />
                   </tr>
@@ -365,7 +430,7 @@ export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
             </div>
           ) : (
             <p className="text-xs text-gray-400 text-center py-4">
-              No activity data for this phase in the selected week.
+              No SOP coverage data for this phase in the selected week.
             </p>
           )}
         </div>

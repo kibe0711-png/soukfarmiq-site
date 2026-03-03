@@ -60,6 +60,21 @@ export interface PhaseActivityRow {
   inSop: boolean;
 }
 
+export interface SopCoverageRow {
+  farm: string;
+  phaseId: string;
+  cropCode: string;
+  areaHa: number;
+  weekMonday: string;
+  wss: number;
+  task: string;
+  category: string;
+  plannedMandays: number;
+  actualMandays: number;
+  variance: number;
+  source: string;
+}
+
 export interface HarvestRow {
   cropCode: string;
   farm: string;
@@ -76,6 +91,7 @@ export interface LaborReportResponse {
   phaseAttention: PhaseRow[];
   phaseHeatmap: HeatmapCell[];
   phaseActivities: PhaseActivityRow[];
+  sopCoverage: SopCoverageRow[];
   harvestEfficiency: HarvestRow[];
 }
 

@@ -174,7 +174,7 @@ export default async function LaborPage() {
           <div className="mb-6">
             <CoverageHeatmap
               phases={data.phaseAttention}
-              phaseActivities={data.phaseActivities ?? []}
+              sopCoverage={data.sopCoverage ?? []}
             />
           </div>
 
