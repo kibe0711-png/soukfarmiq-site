@@ -32,6 +32,11 @@ function getCurrentWeekMonday(): string {
   return monday.toISOString().split("T")[0];
 }
 
+/** Normalize "2026-02-23T00:00:00.000Z" → "2026-02-23" for reliable comparison */
+function toDateStr(iso: string): string {
+  return iso.split("T")[0];
+}
+
 function formatWeek(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
@@ -46,7 +51,7 @@ export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
   const weeks = useMemo(() => {
     const currentWeek = getCurrentWeekMonday();
     const all = [...new Set(phases.map((r) => r.weekMonday))].sort();
-    return all.filter((w) => w < currentWeek);
+    return all.filter((w) => toDateStr(w) < currentWeek);
   }, [phases]);
 
   // The week to display
