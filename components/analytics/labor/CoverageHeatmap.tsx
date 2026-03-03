@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { PhaseRow } from "@/lib/labor-api";
+import type { PhaseRow, PhaseActivityRow } from "@/lib/labor-api";
 
 interface Props {
   phases: PhaseRow[];
+  phaseActivities: PhaseActivityRow[];
 }
 
 function getCellBg(pct: number) {
@@ -23,35 +24,55 @@ function getCellText(pct: number) {
   return "text-red-100";
 }
 
-export default function CoverageHeatmap({ phases }: Props) {
+function getCurrentWeekMonday(): string {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(now.getFullYear(), now.getMonth(), diff);
+  return monday.toISOString().split("T")[0];
+}
+
+function formatWeek(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
+
+export default function CoverageHeatmap({ phases, phaseActivities }: Props) {
   const [selectedFarm, setSelectedFarm] = useState<string>("all");
+  const [selectedWeek, setSelectedWeek] = useState<string>("latest");
   const [selected, setSelected] = useState<PhaseRow | null>(null);
 
-  // Get latest week per farm+phase
-  const latest = useMemo(() => {
-    const m = new Map<string, PhaseRow>();
-    for (const row of phases) {
-      const key = `${row.farm}|${row.phaseId}`;
-      const prev = m.get(key);
-      if (!prev || row.weekMonday > prev.weekMonday) {
-        m.set(key, row);
-      }
-    }
-    return [...m.values()];
+  // Available completed weeks (exclude current incomplete week)
+  const weeks = useMemo(() => {
+    const currentWeek = getCurrentWeekMonday();
+    const all = [...new Set(phases.map((r) => r.weekMonday))].sort();
+    return all.filter((w) => w < currentWeek);
   }, [phases]);
 
+  // The week to display
+  const activeWeek = useMemo(
+    () => (selectedWeek === "latest" ? weeks[weeks.length - 1] : selectedWeek),
+    [selectedWeek, weeks]
+  );
+
+  // Phases for the active week
+  const weekPhases = useMemo(
+    () => (activeWeek ? phases.filter((r) => r.weekMonday === activeWeek) : []),
+    [phases, activeWeek]
+  );
+
   const farms = useMemo(
-    () => [...new Set(latest.map((r) => r.farm))].sort(),
-    [latest]
+    () => [...new Set(weekPhases.map((r) => r.farm))].sort(),
+    [weekPhases]
   );
 
   // Filter by farm
   const filtered = useMemo(
     () =>
       selectedFarm === "all"
-        ? latest
-        : latest.filter((r) => r.farm === selectedFarm),
-    [latest, selectedFarm]
+        ? weekPhases
+        : weekPhases.filter((r) => r.farm === selectedFarm),
+    [weekPhases, selectedFarm]
   );
 
   // Group by farm for the treemap sections
@@ -62,7 +83,6 @@ export default function CoverageHeatmap({ phases }: Props) {
       arr.push(row);
       m.set(row.farm, arr);
     }
-    // Sort phases within each farm by plannedMandays desc
     for (const arr of m.values()) {
       arr.sort((a, b) => b.plannedMandays - a.plannedMandays);
     }
@@ -75,6 +95,19 @@ export default function CoverageHeatmap({ phases }: Props) {
     [filtered]
   );
 
+  // Activities for the selected phase + week
+  const selectedActivities = useMemo(() => {
+    if (!selected || !activeWeek) return [];
+    return phaseActivities
+      .filter(
+        (a) =>
+          a.farm === selected.farm &&
+          a.phaseId === selected.phaseId &&
+          a.weekMonday === activeWeek
+      )
+      .sort((a, b) => b.mandays - a.mandays);
+  }, [selected, activeWeek, phaseActivities]);
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
@@ -83,24 +116,42 @@ export default function CoverageHeatmap({ phases }: Props) {
             Phase Coverage Map
           </h3>
           <p className="text-xs text-gray-400 mt-0.5">
-            Each block = one phase, sized by planned mandays. Click for detail.
+            Each block = one phase, sized by planned mandays. Click for
+            activity breakdown.
           </p>
         </div>
-        <select
-          value={selectedFarm}
-          onChange={(e) => {
-            setSelectedFarm(e.target.value);
-            setSelected(null);
-          }}
-          className="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="all">All Farms</option>
-          {farms.map((f) => (
-            <option key={f} value={f}>
-              {f}
-            </option>
-          ))}
-        </select>
+        <div className="flex items-center gap-2">
+          <select
+            value={selectedWeek}
+            onChange={(e) => {
+              setSelectedWeek(e.target.value);
+              setSelected(null);
+            }}
+            className="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="latest">Latest Week</option>
+            {[...weeks].reverse().map((w) => (
+              <option key={w} value={w}>
+                w/c {formatWeek(w)}
+              </option>
+            ))}
+          </select>
+          <select
+            value={selectedFarm}
+            onChange={(e) => {
+              setSelectedFarm(e.target.value);
+              setSelected(null);
+            }}
+            className="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All Farms</option>
+            {farms.map((f) => (
+              <option key={f} value={f}>
+                {f}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Legend */}
@@ -137,7 +188,6 @@ export default function CoverageHeatmap({ phases }: Props) {
               (s, r) => s + Math.max(r.plannedMandays, 1),
               0
             );
-            // Farm section height proportional to its share of grandTotal
             const farmPct = (farmTotal / grandTotal) * 100;
             const minHeight = Math.max(60, Math.round(farmPct * 4));
 
@@ -158,7 +208,6 @@ export default function CoverageHeatmap({ phases }: Props) {
                     const isSelected =
                       selected?.farm === row.farm &&
                       selected?.phaseId === row.phaseId;
-                    // Minimum width so labels fit
                     const basis = Math.max(pct, 4);
 
                     return (
@@ -208,9 +257,12 @@ export default function CoverageHeatmap({ phases }: Props) {
       {/* Detail panel */}
       {selected && (
         <div className="mt-4 border-t border-gray-200 pt-4">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
             <h4 className="text-xs font-semibold text-gray-900">
               {selected.phaseId} — {selected.cropCode} @ {selected.farm}
+              <span className="ml-2 text-gray-400 font-normal">
+                WSS {selected.wss}
+              </span>
             </h4>
             <button
               onClick={() => setSelected(null)}
@@ -219,7 +271,9 @@ export default function CoverageHeatmap({ phases }: Props) {
               Close
             </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+
+          {/* KPI row */}
+          <div className="grid grid-cols-3 gap-3 text-xs mb-4">
             <div className="bg-gray-50 rounded-lg p-3">
               <p className="text-gray-400 mb-1">Coverage</p>
               <p className="text-lg font-bold text-gray-900 tabular-nums">
@@ -240,14 +294,75 @@ export default function CoverageHeatmap({ phases }: Props) {
               </p>
               <p className="text-[10px] text-gray-400">mandays</p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-gray-400 mb-1">WSS</p>
-              <p className="text-lg font-bold text-gray-900 tabular-nums">
-                {selected.wss}
-              </p>
-              <p className="text-[10px] text-gray-400">week since start</p>
-            </div>
           </div>
+
+          {/* Activity breakdown table */}
+          {selectedActivities.length > 0 ? (
+            <div className="overflow-auto max-h-64">
+              <table className="w-full text-xs">
+                <thead className="sticky top-0 bg-gray-50">
+                  <tr>
+                    <th className="text-left px-3 py-2 font-medium text-gray-500">
+                      Activity
+                    </th>
+                    <th className="text-right px-3 py-2 font-medium text-gray-500">
+                      Mandays
+                    </th>
+                    <th className="text-right px-3 py-2 font-medium text-gray-500">
+                      Workers
+                    </th>
+                    <th className="text-center px-3 py-2 font-medium text-gray-500">
+                      In SOP?
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {selectedActivities.map((a, i) => (
+                    <tr key={i} className="hover:bg-gray-50">
+                      <td className="px-3 py-2 text-gray-900">
+                        {a.activity}
+                      </td>
+                      <td className="px-3 py-2 text-right text-gray-700 tabular-nums">
+                        {a.mandays}
+                      </td>
+                      <td className="px-3 py-2 text-right text-gray-500 tabular-nums">
+                        {a.workers}
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                            a.inSop
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {a.inSop ? "YES" : "NO"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="border-t border-gray-200 bg-gray-50">
+                  <tr>
+                    <td className="px-3 py-2 font-medium text-gray-700">
+                      Total
+                    </td>
+                    <td className="px-3 py-2 text-right font-bold text-gray-900 tabular-nums">
+                      {selectedActivities.reduce((s, a) => s + a.mandays, 0)}
+                    </td>
+                    <td className="px-3 py-2 text-right text-gray-500 tabular-nums">
+                      {selectedActivities.reduce((s, a) => s + a.workers, 0)}
+                    </td>
+                    <td />
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          ) : (
+            <p className="text-xs text-gray-400 text-center py-4">
+              No activity data for this phase in the selected week.
+            </p>
+          )}
         </div>
       )}
     </div>

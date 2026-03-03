@@ -172,7 +172,10 @@ export default async function LaborPage() {
           </div>
 
           <div className="mb-6">
-            <CoverageHeatmap phases={data.phaseAttention} />
+            <CoverageHeatmap
+              phases={data.phaseAttention}
+              phaseActivities={data.phaseActivities ?? []}
+            />
           </div>
 
           <div>
