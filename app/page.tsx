@@ -108,21 +108,22 @@ export default async function Home() {
       />
 
       {/* 5. Where this method applies (claim, anchored by the proof above) */}
-      <section className="py-20 sm:py-28 bg-gray-50">
+      <section className="py-16 sm:py-24 bg-gray-50/70">
         <div className="max-w-6xl mx-auto px-6">
           <div className="max-w-2xl">
-            <p className="text-sm font-medium text-blue-600 tracking-wide uppercase mb-3">
+            <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
               Where we work
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
-              The same digitisation method, different vocabulary.
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-[family-name:var(--font-display)]">
+              Custom-built for your company and your industry.
             </h2>
-            <p className="mt-4 text-lg text-gray-500">
-              FarmIQ is the agri version. Below are the other operator industries we&apos;re built
-              to digitise next — or on request.
+            <p className="mt-3 text-base text-gray-500">
+              Every system we ship is scoped and built around the way you actually operate —
+              your workflows, your vocabulary, your reporting cadence. Here are some of the
+              industries we work in.
             </p>
           </div>
-          <div className="mt-12">
+          <div className="mt-10">
             <IndustryGrid bare />
           </div>
         </div>

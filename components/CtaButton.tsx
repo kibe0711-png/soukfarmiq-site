@@ -14,7 +14,7 @@ interface CtaButtonProps {
 
 const VARIANT_CLS: Record<Variant, string> = {
   primary:
-    "bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md",
+    "bg-gray-900 hover:bg-gray-800 text-white shadow-sm hover:shadow-md",
   secondary:
     "bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 hover:border-gray-300",
   tertiary:
@@ -27,7 +27,7 @@ export default function CtaButton({
   variant = "primary",
   external,
 }: CtaButtonProps) {
-  const cls = `inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-full transition-all ${VARIANT_CLS[variant]}`;
+  const cls = `inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-[10px] transition-all ${VARIANT_CLS[variant]}`;
   if (external) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>

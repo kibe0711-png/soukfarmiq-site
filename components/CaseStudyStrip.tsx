@@ -30,11 +30,11 @@ export default function CaseStudyStrip({
   href,
 }: CaseStudyStripProps) {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="py-16 sm:py-24">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           {/* Photo */}
-          <div className="relative aspect-[5/4] rounded-3xl overflow-hidden bg-gray-100 order-2 lg:order-1">
+          <div className="relative aspect-[5/4] rounded-2xl overflow-hidden bg-gray-100 order-2 lg:order-1">
             <Image
               src={photoSrc}
               alt={photoAlt}
@@ -47,16 +47,16 @@ export default function CaseStudyStrip({
 
           {/* Story */}
           <div className="order-1 lg:order-2">
-            <p className="text-sm font-medium text-blue-600 tracking-wide uppercase mb-3">
+            <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
               Case study · {customer}
             </p>
-            <div className="border-l-4 border-blue-600 pl-5 mb-6">
-              <p className="text-4xl sm:text-5xl font-bold text-gray-900 tabular-nums leading-none">
+            <div className="border-l-2 border-gray-900 pl-5 mb-5">
+              <p className="text-3xl sm:text-4xl font-bold text-gray-900 tabular-nums leading-none font-[family-name:var(--font-display)]">
                 {bigNumber}
               </p>
               <p className="mt-2 text-sm text-gray-500 leading-snug">{bigCaption}</p>
             </div>
-            <p className="text-base text-gray-700 leading-relaxed">{story}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{story}</p>
 
             {quote && (
               <blockquote className="mt-6 border-t border-gray-200 pt-6">

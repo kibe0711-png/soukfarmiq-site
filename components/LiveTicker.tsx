@@ -38,13 +38,13 @@ export default function LiveTicker({ stats }: TickerProps) {
 
   return (
     <div className="overflow-hidden">
-      <div className="animate-ticker flex whitespace-nowrap py-4 will-change-transform">
+      <div className="animate-ticker flex whitespace-nowrap py-3 will-change-transform">
         {items.map((stat, i) => (
           <div
             key={i}
-            className="inline-flex items-center gap-2 text-sm text-gray-400 mx-8 shrink-0"
+            className="inline-flex items-center gap-2 text-[13px] text-gray-400 mx-8 shrink-0"
           >
-            <span className="font-bold text-green-500 tabular-nums text-lg">
+            <span className="font-bold text-emerald-600 tabular-nums text-base">
               {i < stats.length ? (
                 <AnimatedNumber target={stat.value} suffix={stat.suffix} />
               ) : (

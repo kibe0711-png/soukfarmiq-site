@@ -3,16 +3,16 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="bg-gray-950 text-gray-400">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
-          <div className="flex items-center gap-3">
+      <div className="max-w-6xl mx-auto px-6 py-10">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="flex items-center gap-2.5">
             <Image
               src="/altiora-logo.png"
               alt="Altiora"
-              width={28}
-              height={28}
+              width={24}
+              height={24}
             />
-            <span className="text-sm font-semibold text-white">Altiora</span>
+            <span className="text-sm font-semibold text-white font-[family-name:var(--font-display)]">Altiora</span>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
             <a href="#features" className="hover:text-white transition-colors">

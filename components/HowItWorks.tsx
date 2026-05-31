@@ -31,54 +31,36 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 sm:py-28 bg-gray-50">
+    <section id="how-it-works" className="py-16 sm:py-24 bg-gray-50/70">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="max-w-3xl mb-16">
-          <p className="text-sm font-medium text-blue-600 tracking-wide uppercase mb-3">
+        <div className="max-w-3xl mb-12">
+          <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
             The Altiora method
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
-            We digitise an ops business in
-            <br />
-            <span className="text-blue-600">six to twelve weeks.</span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight font-[family-name:var(--font-display)]">
+            We digitise an ops business in{" "}
+            <span className="text-blue-700">six to twelve weeks.</span>
           </h2>
-          <p className="mt-5 text-lg text-gray-500 leading-relaxed">
+          <p className="mt-4 text-base text-gray-500 leading-relaxed">
             Four steps, named milestones, working software every Friday. You stay in the loop —
             this is your operation, built on your vocabulary, in your timezone.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          {steps.map((step, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {steps.map((step) => (
             <div
               key={step.number}
-              className="relative p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all"
+              className="relative p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/80 hover:border-gray-300 hover:shadow-sm transition-all"
             >
-              <div className="flex items-center gap-4 mb-5">
-                <span className="text-5xl font-black text-blue-100">{step.number}</span>
-                <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-3xl font-bold text-gray-200 tabular-nums font-[family-name:var(--font-display)]">{step.number}</span>
+                <div className="w-8 h-8 rounded-[10px] bg-blue-50 text-blue-700 flex items-center justify-center">
                   {step.icon}
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 leading-snug">{step.title}</h3>
+              <h3 className="text-base font-bold text-gray-900 mb-2 leading-snug font-[family-name:var(--font-display)]">{step.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
-              {i < steps.length - 1 && (
-                <div className="hidden md:block absolute -bottom-6 left-1/2 -translate-x-1/2 text-gray-200">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
-                    />
-                  </svg>
-                </div>
-              )}
             </div>
           ))}
         </div>

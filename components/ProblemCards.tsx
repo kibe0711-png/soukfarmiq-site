@@ -24,36 +24,36 @@ const problems = [
 
 export default function ProblemCards() {
   return (
-    <section className="py-20 sm:py-28 bg-gray-50">
+    <section className="py-16 sm:py-24 bg-gray-50/70">
       <div className="max-w-6xl mx-auto px-6">
         <div className="max-w-2xl">
-          <p className="text-sm font-medium text-blue-600 tracking-wide uppercase mb-3">
+          <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
             What we hear, over and over
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-[family-name:var(--font-display)]">
             Three ways ops chaos shows up.
           </h2>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-3 text-base text-gray-500">
             Different industries, different vocabulary, same pattern. If two of these sound like
             your week, we should talk.
           </p>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
           {problems.map((p) => (
             <article
               key={p.title}
-              className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col"
+              className="bg-white border border-gray-200/80 rounded-2xl p-6 flex flex-col hover:border-gray-300 hover:shadow-sm transition-all"
             >
-              <h3 className="text-base font-semibold text-gray-900 leading-tight">
+              <h3 className="text-sm font-semibold text-gray-900 leading-tight font-[family-name:var(--font-display)]">
                 {p.title}
               </h3>
-              <p className="mt-3 text-sm text-gray-600 leading-relaxed">{p.pain}</p>
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-xs font-medium text-blue-600 uppercase tracking-wide mb-1.5">
+              <p className="mt-2.5 text-sm text-gray-500 leading-relaxed">{p.pain}</p>
+              <div className="mt-auto pt-4 mt-4 border-t border-gray-100">
+                <p className="text-[11px] font-semibold text-blue-700 uppercase tracking-widest mb-1.5">
                   What we replace it with
                 </p>
-                <p className="text-sm text-gray-900 leading-relaxed">{p.outcome}</p>
+                <p className="text-sm text-gray-800 leading-relaxed">{p.outcome}</p>
               </div>
             </article>
           ))}

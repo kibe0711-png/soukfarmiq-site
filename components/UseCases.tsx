@@ -35,28 +35,28 @@ const buyerProfiles = [
 
 export default function UseCases() {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="py-16 sm:py-24">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="max-w-2xl mb-12">
-          <p className="text-sm font-medium text-blue-600 tracking-wide uppercase mb-3">
+        <div className="max-w-2xl mb-10">
+          <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
             For whom
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-[family-name:var(--font-display)]">
             Built for operators who&apos;ve outgrown their tools.
           </h2>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-3 text-base text-gray-500">
             We don&apos;t target a role. We target a situation. If you recognise yourself in any
             of these, we&apos;d like to talk.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {buyerProfiles.map((p) => (
             <div
               key={p.headline}
-              className={`p-8 rounded-2xl border ${p.accent}`}
+              className={`p-5 sm:p-6 rounded-2xl border ${p.accent}`}
             >
-              <div className={`${p.iconColor} mb-4`}>{p.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-snug">
+              <div className={`${p.iconColor} mb-3`}>{p.icon}</div>
+              <h3 className="text-base font-semibold text-gray-900 mb-2 leading-snug font-[family-name:var(--font-display)]">
                 {p.headline}
               </h3>
               <p className="text-sm text-gray-600 leading-relaxed">{p.body}</p>
