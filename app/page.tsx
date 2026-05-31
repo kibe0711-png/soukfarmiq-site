@@ -18,7 +18,6 @@ async function getStats() {
       attendanceCount,
       farmCount,
       hectaresResult,
-      orgCount,
       laborLogCount,
       feedingCount,
     ] = await Promise.all([
@@ -33,7 +32,6 @@ async function getStats() {
         _sum: { areaHa: true },
         where: { archived: false },
       }),
-      prisma.organization.count(),
       prisma.laborSchedule.count(),
       prisma.feedingRecord.count(),
     ]);
@@ -50,7 +48,7 @@ async function getStats() {
       activities: attendanceCount,
       farms: farmCount,
       hectares: Number(hectaresResult._sum.areaHa ?? 0),
-      orgs: orgCount,
+      orgs: farmCount,
       hoursPerWeekSaved,
       totalRecords,
     };
