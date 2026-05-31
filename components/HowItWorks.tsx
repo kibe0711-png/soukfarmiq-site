@@ -37,7 +37,7 @@ export default function HowItWorks() {
           <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
             The Altiora method
           </p>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight font-[family-name:var(--font-display)]">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight leading-tight font-[family-name:var(--font-display)]">
             We digitise an ops business in{" "}
             <span className="text-blue-700">six to twelve weeks.</span>
           </h2>
@@ -54,12 +54,12 @@ export default function HowItWorks() {
               className="relative p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/80 hover:border-gray-300 hover:shadow-sm transition-all"
             >
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-3xl font-bold text-gray-200 tabular-nums font-[family-name:var(--font-display)]">{step.number}</span>
+                <span className="text-3xl font-semibold text-gray-200 tabular-nums font-[family-name:var(--font-display)]">{step.number}</span>
                 <div className="w-8 h-8 rounded-[10px] bg-blue-50 text-blue-700 flex items-center justify-center">
                   {step.icon}
                 </div>
               </div>
-              <h3 className="text-base font-bold text-gray-900 mb-2 leading-snug font-[family-name:var(--font-display)]">{step.title}</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-2 leading-snug font-[family-name:var(--font-display)]">{step.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
             </div>
           ))}

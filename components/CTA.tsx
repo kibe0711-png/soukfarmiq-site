@@ -8,7 +8,7 @@ export default function CTA() {
     <section className="py-16 sm:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <div className="relative overflow-hidden rounded-[20px] bg-gray-900 px-8 py-14 sm:px-14 sm:py-16 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight font-[family-name:var(--font-display)]">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight font-[family-name:var(--font-display)]">
             Stop reconciling.
             <br />
             Start operating.

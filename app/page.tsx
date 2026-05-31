@@ -114,7 +114,7 @@ export default async function Home() {
             <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
               Where we work
             </p>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-[family-name:var(--font-display)]">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight font-[family-name:var(--font-display)]">
               Custom-built for your company and your industry.
             </h2>
             <p className="mt-3 text-base text-gray-500">

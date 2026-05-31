@@ -38,13 +38,13 @@ export default function LiveTicker({ stats }: TickerProps) {
 
   return (
     <div className="overflow-hidden">
-      <div className="animate-ticker flex whitespace-nowrap py-3 will-change-transform">
+      <div className="animate-ticker flex whitespace-nowrap py-2 will-change-transform">
         {items.map((stat, i) => (
           <div
             key={i}
-            className="inline-flex items-center gap-2 text-[13px] text-gray-400 mx-8 shrink-0"
+            className="inline-flex items-center gap-2.5 text-sm text-gray-500 mx-10 shrink-0"
           >
-            <span className="font-bold text-emerald-600 tabular-nums text-base">
+            <span className="font-bold text-emerald-600 tabular-nums text-lg">
               {i < stats.length ? (
                 <AnimatedNumber target={stat.value} suffix={stat.suffix} />
               ) : (
@@ -52,7 +52,7 @@ export default function LiveTicker({ stats }: TickerProps) {
               )}
             </span>
             <span>{stat.label}</span>
-            <span className="text-gray-300 ml-6">·</span>
+            <span className="text-gray-300 ml-8">·</span>
           </div>
         ))}
       </div>

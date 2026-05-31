@@ -41,7 +41,7 @@ export default function UseCases() {
           <p className="text-xs font-semibold text-blue-700 tracking-widest uppercase mb-3">
             For whom
           </p>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-[family-name:var(--font-display)]">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 tracking-tight font-[family-name:var(--font-display)]">
             Built for operators who&apos;ve outgrown their tools.
           </h2>
           <p className="mt-3 text-base text-gray-500">

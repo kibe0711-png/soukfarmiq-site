@@ -51,7 +51,7 @@ export default function CaseStudyStrip({
               Case study · {customer}
             </p>
             <div className="border-l-2 border-gray-900 pl-5 mb-5">
-              <p className="text-3xl sm:text-4xl font-bold text-gray-900 tabular-nums leading-none font-[family-name:var(--font-display)]">
+              <p className="text-3xl sm:text-4xl font-semibold text-gray-900 tabular-nums leading-none font-[family-name:var(--font-display)]">
                 {bigNumber}
               </p>
               <p className="mt-2 text-sm text-gray-500 leading-snug">{bigCaption}</p>
