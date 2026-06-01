@@ -5,14 +5,14 @@ export default function Footer() {
     <footer className="bg-gray-950 text-gray-400">
       <div className="max-w-6xl mx-auto px-6 py-10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center">
             <Image
               src="/altiora-logo.png"
               alt="Altiora"
-              width={24}
+              width={90}
               height={24}
+              className="h-6 w-auto brightness-0 invert"
             />
-            <span className="text-sm font-semibold text-white font-[family-name:var(--font-display)]">Altiora</span>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
             <a href="#features" className="hover:text-white transition-colors">

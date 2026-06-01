@@ -90,11 +90,8 @@ export default function NavBar() {
   return (
     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-gray-200/60">
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5">
-          <Image src="/altiora-logo.png" alt="Altiora" width={28} height={28} />
-          <span className="text-base font-semibold tracking-tight text-gray-900 font-[family-name:var(--font-display)]">
-            Altiora
-          </span>
+        <Link href="/" className="flex items-center">
+          <Image src="/altiora-logo.png" alt="Altiora" width={100} height={28} className="h-7 w-auto" />
         </Link>
         <div className="flex items-center gap-1 sm:gap-5">
           {NAV_ITEMS.map((item) =>
