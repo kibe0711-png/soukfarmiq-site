@@ -1,15 +1,19 @@
-import ComingSoon from "@/components/ComingSoon";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
+import AboutContent from "@/components/AboutContent";
 
 export const metadata = {
-  title: "About Altiora",
-  description: "Altiora builds operations systems for sectors generic ERPs ignore.",
+  title: "About Altiora — Company Information",
+  description:
+    "Altiora builds custom operations systems for sectors generic ERPs ignore. Learn about our story, strategy, and team.",
 };
 
 export default function AboutPage() {
   return (
-    <ComingSoon
-      pageName="About Altiora"
-      tagline="Coming soon: the team, the why, and how we ended up building software for fish processors, fuel distributors, and farmers."
-    />
+    <main className="min-h-screen bg-white">
+      <NavBar />
+      <AboutContent />
+      <Footer />
+    </main>
   );
 }
