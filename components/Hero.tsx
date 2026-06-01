@@ -14,7 +14,7 @@ const slides = [
     headline: (
       <>
         Put AI to work for your business{" "}
-        <span className="text-blue-600">with Altiora.</span>
+        <span className="text-blue-200">with Altiora.</span>
       </>
     ),
     subtext:
@@ -22,6 +22,7 @@ const slides = [
     cta: { label: "Book a 30-min discovery call", href: "/book" },
     secondary: { label: "See how we built FarmIQ", href: "/case-studies/karakuta" },
     showChat: true,
+    dark: true,
   },
   {
     badge: "Operations digitisation",
@@ -36,13 +37,14 @@ const slides = [
     cta: { label: "Book a 30-min discovery call", href: "/book" },
     secondary: { label: "See how we built FarmIQ", href: "/case-studies/karakuta" },
     showChat: false,
+    dark: false,
   },
   {
     badge: "Custom-built ERP",
     headline: (
       <>
         Off-the-shelf software doesn&apos;t fit.{" "}
-        <span className="text-blue-600">We build around your operation.</span>
+        <span className="text-blue-200">We build around your operation.</span>
       </>
     ),
     subtext:
@@ -50,6 +52,7 @@ const slides = [
     cta: { label: "See our method", href: "#how-it-works" },
     secondary: { label: "Industries we serve", href: "#industries" },
     showChat: false,
+    dark: true,
   },
   {
     badge: "Live in production",
@@ -64,6 +67,7 @@ const slides = [
     cta: { label: "Book a discovery call", href: "/book" },
     secondary: { label: "Read a case study", href: "/case-studies/karakuta" },
     showChat: false,
+    dark: false,
   },
 ];
 
@@ -91,18 +95,40 @@ export default function Hero({ tickerStats }: HeroProps) {
   const slide = slides[current];
 
   return (
-    <section className="relative min-h-screen flex flex-col bg-gradient-to-b from-gray-50/80 via-white to-white">
-      {/* Background grid pattern */}
+    <section
+      className={`relative min-h-screen flex flex-col transition-colors duration-700 ${
+        slide.dark
+          ? "bg-blue-700"
+          : "bg-gradient-to-b from-gray-50/80 via-white to-white"
+      }`}
+    >
+      {/* Background pattern */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-100/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-50/40 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+        {slide.dark ? (
+          <>
+            <div
+              className="absolute inset-0 opacity-[0.06]"
+              style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+                backgroundSize: "32px 32px",
+              }}
+            />
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-900/30 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+          </>
+        ) : (
+          <>
+            <div
+              className="absolute inset-0 opacity-[0.03]"
+              style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+                backgroundSize: "32px 32px",
+              }}
+            />
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-100/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-50/40 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+          </>
+        )}
       </div>
 
       {/* Main content — grows to fill screen */}
@@ -114,10 +140,14 @@ export default function Hero({ tickerStats }: HeroProps) {
               {/* Badge */}
               <div
                 key={`badge-${current}`}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 mb-6 animate-fade-up"
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mb-6 animate-fade-up ${
+                  slide.dark
+                    ? "bg-white/10 border border-white/20"
+                    : "bg-blue-50 border border-blue-100"
+                }`}
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-                <span className="text-xs font-semibold text-blue-700 tracking-wide uppercase">
+                <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${slide.dark ? "bg-white" : "bg-blue-600"}`} />
+                <span className={`text-xs font-semibold tracking-wide uppercase ${slide.dark ? "text-blue-100" : "text-blue-700"}`}>
                   {slide.badge}
                 </span>
               </div>
@@ -125,7 +155,9 @@ export default function Hero({ tickerStats }: HeroProps) {
               {/* Headline */}
               <h1
                 key={`headline-${current}`}
-                className="text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold tracking-tight text-gray-900 leading-[1.12] font-[family-name:var(--font-display)] animate-fade-up animation-delay-100"
+                className={`text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold tracking-tight leading-[1.12] font-[family-name:var(--font-display)] animate-fade-up animation-delay-100 ${
+                  slide.dark ? "text-white" : "text-gray-900"
+                }`}
               >
                 {slide.headline}
               </h1>
@@ -133,7 +165,9 @@ export default function Hero({ tickerStats }: HeroProps) {
               {/* Subtext */}
               <p
                 key={`subtext-${current}`}
-                className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed max-w-xl animate-fade-up animation-delay-200"
+                className={`mt-5 text-base sm:text-lg leading-relaxed max-w-xl animate-fade-up animation-delay-200 ${
+                  slide.dark ? "text-blue-100" : "text-gray-500"
+                }`}
               >
                 {slide.subtext}
               </p>
@@ -169,13 +203,13 @@ export default function Hero({ tickerStats }: HeroProps) {
                 onClick={() => goTo(i)}
                 className={`h-1.5 rounded-full transition-all duration-500 ${
                   i === current
-                    ? "w-8 bg-blue-600"
-                    : "w-3 bg-gray-300 hover:bg-gray-400"
+                    ? `w-8 ${slide.dark ? "bg-white" : "bg-blue-600"}`
+                    : `w-3 ${slide.dark ? "bg-white/30 hover:bg-white/50" : "bg-gray-300 hover:bg-gray-400"}`
                 }`}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}
-            <span className="ml-3 text-xs text-gray-400 tabular-nums">
+            <span className={`ml-3 text-xs tabular-nums ${slide.dark ? "text-white/50" : "text-gray-400"}`}>
               {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
             </span>
           </div>
@@ -183,12 +217,12 @@ export default function Hero({ tickerStats }: HeroProps) {
       </div>
 
       {/* Live ticker — more prominent */}
-      <div className="relative border-t border-gray-200/60 bg-gray-50/50 backdrop-blur-sm">
+      <div className={`relative border-t backdrop-blur-sm ${slide.dark ? "border-white/10 bg-blue-800/50" : "border-gray-200/60 bg-gray-50/50"}`}>
         <div className="max-w-6xl mx-auto px-6 pt-3">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
+              <p className={`text-[11px] font-semibold uppercase tracking-widest ${slide.dark ? "text-blue-200/60" : "text-gray-400"}`}>
                 Live from our database
               </p>
             </div>

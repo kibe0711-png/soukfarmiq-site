@@ -96,7 +96,7 @@ export default async function Home() {
         bigNumber={`${stats.hoursPerWeekSaved}+`}
         bigCaption="hours per week of manual reconciliation saved at Karakuta — automated by FarmIQ across farms, packhouse, and weekly reporting."
         customer="Karakuta Fresh Produce"
-        story="Karakuta runs farms in Mulindi, Musha, Gatsibo, and Imigongo and exports fresh chilli, beans, and green-leaf crops to MWW, Wealmoor, and Fresh4u in the UK. Altiora built FarmIQ for them: every intake at the packhouse, every grade and reject at the sorting bench, every export sale and freight cost flows through one system. Weekly digests land in inboxes automatically. The Sunday-night spreadsheet ritual is gone."
+        story="Souk runs farms in Mulindi, Musha, Gatsibo, and Imigongo under the Karakuta brand, exporting fresh chilli, beans, and green-leaf crops to MWW, Wealmoor, and Fresh4u in the UK. Altiora built FarmIQ for them: every intake at the packhouse, every grade and reject at the sorting bench, every export sale and freight cost flows through one system. Weekly digests land in inboxes automatically. The Sunday-night spreadsheet ritual is gone."
         quote={{
           text:
             "FarmIQ runs my operation. I see margin per kg the day after we ship. I don't need to ask anyone.",

@@ -245,13 +245,13 @@ export default function AgribusinessPage() {
                 Karakuta Fresh Produce
               </h3>
               <p className="mt-1 text-sm text-gray-500">
-                Multi-farm export operation · Rwanda → UK
+                Multi-farm export operation · Rwanda → UK · Managed by Souk
               </p>
               <p className="mt-4 text-sm text-gray-600 leading-relaxed">
-                Karakuta runs farms in Mulindi, Musha, Gatsibo, and Imigongo and exports fresh chilli,
-                beans, and green-leaf crops to MWW, Wealmoor, and Fresh4u in the UK. Altiora built
-                FarmIQ for them: every intake at the packhouse, every grade and reject at the sorting
-                bench, every export sale and freight cost flows through one system.
+                Souk runs farms in Mulindi, Musha, Gatsibo, and Imigongo under the Karakuta brand,
+                exporting fresh chilli, beans, and green-leaf crops to MWW, Wealmoor, and Fresh4u
+                in the UK. Altiora built FarmIQ for them: every intake at the packhouse, every grade
+                and reject at the sorting bench, every export sale and freight cost flows through one system.
               </p>
               <blockquote className="mt-5 border-l-2 border-gray-300 pl-4">
                 <p className="text-sm text-gray-900 italic">
